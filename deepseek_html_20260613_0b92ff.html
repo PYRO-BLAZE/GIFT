@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Areeba! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #1a0003;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='%23e63946' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>") 12 12, auto;
+        }
+
+        /* Rose Petals */
+        .petals-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .petal {
+            position: absolute; top: -50px;
+            width: 20px; height: 20px;
+            background: radial-gradient(circle at 30% 30%, #e63946, #8b0000);
+            border-radius: 50% 0 50% 50%;
+            animation: fall linear infinite; opacity: 0.7;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg) translateX(0); opacity: 0.8; }
+            100% { transform: translateY(100vh) rotate(720deg) translateX(100px); opacity: 0; }
+        }
+
+        /* Main Container */
+        .main-content { position: relative; z-index: 1; }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 20px;
+        }
+
+        .glitch-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 8vw, 7rem);
+            color: #fff;
+            text-shadow: 0 0 10px #e63946, 0 0 20px #e63946, 0 0 40px #e63946, 0 0 80px #c41e3a;
+            animation: neonPulse 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neonPulse {
+            from { text-shadow: 0 0 10px #e63946, 0 0 20px #e63946, 0 0 40px #e63946, 0 0 80px #c41e3a; }
+            to { text-shadow: 0 0 20px #ff6b7a, 0 0 40px #ff6b7a, 0 0 80px #e63946, 0 0 120px #c41e3a; }
+        }
+
+        .subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #ffb3b3; margin-top: 10px; opacity: 0;
+            animation: fadeIn 2s ease forwards 0.5s;
+        }
+
+        /* Countdown */
+        .countdown-section { padding: 40px 20px; text-align: center; }
+        .countdown-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem; color: #ffb3b3; margin-bottom: 30px;
+            transition: all 0.5s ease;
+        }
+        .countdown-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; transition: all 0.5s ease; }
+        .countdown-item {
+            background: rgba(230, 57, 70, 0.2); border: 2px solid #e63946;
+            border-radius: 20px; padding: 25px 30px; min-width: 100px;
+            animation: heartbeat 1.2s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+        .countdown-item.birthday-mode {
+            background: rgba(230, 57, 70, 0.5); border-color: #ff6b7a;
+            animation: heartbeat 0.6s ease-in-out infinite;
+        }
+        .countdown-number {
+            font-size: 3rem; font-weight: 700; color: #e63946;
+            font-family: 'Poppins', sans-serif;
+        }
+        .countdown-label { font-size: 1rem; color: #ffb3b3; text-transform: uppercase; }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+        }
+
+        /* Birthday Surprise Reveal */
+        .birthday-surprise {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1.5s ease forwards;
+        }
+        .birthday-surprise.show { display: block; }
+        .surprise-heading {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 7vw, 5rem);
+            color: #e63946;
+            text-shadow: 0 0 20px #e63946, 0 0 40px #e63946;
+            animation: neonPulse 1s ease-in-out infinite alternate;
+        }
+        .surprise-gif-container {
+            margin: 30px auto;
+            max-width: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 4px solid #e63946;
+            box-shadow: 0 0 40px rgba(230, 57, 70, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
+        .surprise-gif-container img {
+            width: 100%; display: block;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .surprise-message-box {
+            background: rgba(230, 57, 70, 0.15);
+            border: 2px solid #e63946;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+        .surprise-message-box p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #ffcccc;
+            line-height: 1.8;
+        }
+        .surprise-btn-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Flirty Lines */
+        .flirty-section { padding: 60px 20px; text-align: center; }
+        .section-title {
+            font-family: 'Dancing Script', cursive; font-size: 3rem;
+            color: #e63946; margin-bottom: 40px;
+        }
+        .flirty-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; max-width: 1200px; margin: 0 auto;
+        }
+        .flirty-card {
+            background: rgba(230, 57, 70, 0.1); border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 15px; padding: 30px; font-size: 1.1rem;
+            color: #ffcccc; transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0; transform: translateY(30px);
+        }
+        .flirty-card.visible {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        .flirty-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            border-color: #e63946;
+        }
+
+        /* Surprise Button */
+        .surprise-section { padding: 40px 20px; text-align: center; }
+        .btn {
+            background: linear-gradient(135deg, #e63946, #c41e3a);
+            color: #fff; border: none; padding: 15px 40px; font-size: 1.2rem;
+            border-radius: 50px; cursor: pointer; font-family: 'Poppins', sans-serif;
+            transition: transform 0.3s, box-shadow 0.3s; margin: 10px;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.5);
+        }
+        .surprise-message {
+            margin-top: 20px; font-size: 1.3rem; color: #ffb3b3;
+            font-family: 'Dancing Script', cursive; min-height: 40px;
+        }
+
+        /* Cake */
+        .cake-section { padding: 60px 20px; text-align: center; }
+        .cake-container { position: relative; display: inline-block; cursor: pointer; }
+        .cake {
+            width: 200px; height: 160px; background: linear-gradient(to bottom, #ff6b7a, #e63946);
+            border-radius: 20px 20px 0 0; position: relative; margin: 0 auto;
+        }
+        .cake-layer {
+            width: 200px; height: 50px; background: #fff;
+            border-radius: 10px; position: absolute; bottom: 30px;
+        }
+        .candle {
+            width: 10px; height: 40px; background: #fff; position: absolute;
+            top: -40px; border-radius: 5px;
+        }
+        .candle:nth-child(1) { left: 50px; }
+        .candle:nth-child(2) { left: 95px; }
+        .candle:nth-child(3) { right: 50px; }
+        .flame {
+            width: 12px; height: 20px; background: #ffa500; position: absolute;
+            top: -20px; left: -1px; border-radius: 50%;
+            animation: flicker 0.3s infinite alternate;
+        }
+        .flame.out { display: none; }
+        @keyframes flicker {
+            from { transform: scale(1) rotate(-5deg); }
+            to { transform: scale(1.1) rotate(5deg); }
+        }
+        .smoke {
+            position: absolute; top: -30px; width: 5px; height: 5px;
+            background: #888; border-radius: 50%; display: none;
+            animation: rise 1s ease-out forwards;
+        }
+        @keyframes rise {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* Reasons Grid */
+        .reasons-section { padding: 60px 20px; text-align: center; }
+        .reasons-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; max-width: 1000px; margin: 0 auto;
+        }
+        .reason-card {
+            perspective: 1000px; height: 200px;
+        }
+        .reason-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .reason-card:hover .reason-inner { transform: rotateY(180deg); }
+        .reason-front, .reason-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 15px; display: flex; align-items: center;
+            justify-content: center; padding: 20px; text-align: center;
+        }
+        .reason-front {
+            background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3);
+            font-size: 2rem; color: #e63946;
+        }
+        .reason-back {
+            background: #e63946; transform: rotateY(180deg);
+            font-size: 1rem; color: #fff; font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+        }
+
+        /* Envelope */
+        .envelope-section { padding: 60px 20px; text-align: center; }
+        .envelope {
+            display: inline-block; cursor: pointer; font-size: 6rem;
+            transition: transform 0.3s; position: relative;
+        }
+        .envelope:hover { transform: scale(1.1); }
+        .envelope.open { transform: rotate(-10deg) scale(1.2); }
+        .letter-content {
+            display: none; max-width: 600px; margin: 20px auto;
+            background: rgba(230, 57, 70, 0.15); border-radius: 15px;
+            padding: 30px; font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem; color: #ffcccc; line-height: 1.8;
+        }
+        .letter-content.show { display: block; animation: fadeIn 1s ease; }
+
+        /* Music Toggle */
+        .music-btn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: #e63946; color: #fff; border: none;
+            font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.5);
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        /* Forever Button */
+        .forever-section { padding: 40px 20px 80px; text-align: center; }
+        .forever-btn { font-size: 1.5rem; padding: 20px 50px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .countdown-item { min-width: 70px; padding: 15px 20px; }
+            .countdown-number { font-size: 2rem; }
+            .surprise-gif-container { max-width: 300px; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1a0003; }
+        ::-webkit-scrollbar-thumb { background: #e63946; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Rose Petals -->
+    <div class="petals-container" id="petals"></div>
+
+    <div class="main-content">
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1 class="glitch-text" id="typed-text"></h1>
+            <p class="subtitle">The most beautiful girl in the world ❤️</p>
+        </section>
+
+        <!-- Countdown -->
+        <section class="countdown-section" id="countdownSection">
+            <h2 class="countdown-title" id="countdownTitle">Counting down to your special day...</h2>
+            <div class="countdown-container" id="countdown">
+                <div class="countdown-item" id="daysItem"><div class="countdown-number" id="days">00</div><div class="countdown-label">Days</div></div>
+                <div class="countdown-item" id="hoursItem"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Hours</div></div>
+                <div class="countdown-item" id="minutesItem"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Minutes</div></div>
+                <div class="countdown-item" id="secondsItem"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Seconds</div></div>
+            </div>
+        </section>
+
+        <!-- BIRTHDAY SURPRISE REVEAL (Hidden until countdown hits zero) -->
+        <section class="birthday-surprise" id="birthdaySurprise">
+            <h2 class="surprise-heading">🎉 HAPPY BIRTHDAY AREEBA! 🎉</h2>
+            <div class="surprise-gif-container">
+                <img src="https://media.giphy.com/media/26u4lOMA8JKSnX9QA/giphy.gif" alt="Happy Birthday" id="surpriseGif">
+            </div>
+            <div class="surprise-message-box">
+                <p>My Dearest Areeba,</p>
+                <p>The wait is finally over! Today is YOUR day — the day the world became a better place because you were born. Every second of this countdown was worth it, just like every moment with you is priceless.</p>
+                <p>You're the red in my rose, the beat in my heart, the smile on my face. I hope this little surprise brings a big smile to your beautiful face.</p>
+                <p style="font-size: 1.8rem;">I love you more than words can say. 💕</p>
+                <p>Now let's celebrate like crazy! 🎂🎈</p>
+            </div>
+            <div class="surprise-btn-row">
+                <button class="btn" onclick="document.getElementById('cakeContainer').scrollIntoView({behavior:'smooth'}); blowCandles();">🎂 Blow Candles</button>
+                <button class="btn" onclick="foreverExplosion()">🎆 Celebration Time</button>
+            </div>
+        </section>
+
+        <!-- Flirty Lines -->
+        <section class="flirty-section">
+            <h2 class="section-title">Words from the heart...</h2>
+            <div class="flirty-grid">
+                <div class="flirty-card">"Areeba, you're the reason my heart skips a beat... every single day."</div>
+                <div class="flirty-card">"Is your name Google? Because you've got everything I've been searching for."</div>
+                <div class="flirty-card">"They say red is the color of love... no wonder it's your favorite, because you ARE love."</div>
+                <div class="flirty-card">"If you were a bug, I'd never debug you. Stay in my system forever."</div>
+                <div class="flirty-card">"You must be made of copper and tellurium... because you're Cu-Te."</div>
+                <div class="flirty-card">"Areeba, even the stars get jealous when you smile."</div>
+                <div class="flirty-card">"Happy Birthday to the girl who stole my heart and refuses to give it back."</div>
+                <div class="flirty-card">"You + Me = The only algorithm that actually works."</div>
+                <div class="flirty-card">"On a scale of 1 to 10, you're a 17th of June — absolutely perfect."</div>
+            </div>
+        </section>
+
+        <!-- Surprise Button -->
+        <section class="surprise-section">
+            <button class="btn" onclick="showSurprise()">💌 Click for a Surprise Message</button>
+            <div class="surprise-message" id="surpriseMsg"></div>
+        </section>
+
+        <!-- Virtual Cake -->
+        <section class="cake-section" id="cakeSection">
+            <h2 class="section-title">Blow out the candles! 🎂</h2>
+            <div class="cake-container" id="cakeContainer" onclick="blowCandles()">
+                <div class="cake">
+                    <div class="cake-layer"></div>
+                    <div class="candle"><div class="flame" id="flame1"></div><div class="smoke" id="smoke1"></div></div>
+                    <div class="candle"><div class="flame" id="flame2"></div><div class="smoke" id="smoke2"></div></div>
+                    <div class="candle"><div class="flame" id="flame3"></div><div class="smoke" id="smoke3"></div></div>
+                </div>
+                <p style="margin-top:10px; color:#ffb3b3;" id="cakeInstruction">Click to blow out the candles!</p>
+            </div>
+        </section>
+
+        <!-- Reasons I Love You -->
+        <section class="reasons-section">
+            <h2 class="section-title">9 Reasons Why I Love You</h2>
+            <div class="reasons-grid">
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">💖</div><div class="reason-back">Your smile lights up my darkest days</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">✨</div><div class="reason-back">The way you say my name</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">🌹</div><div class="reason-back">Your kindness knows no bounds</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">🔥</div><div class="reason-back">You make every moment exciting</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">🎯</div><div class="reason-back">Your ambition inspires me daily</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">😂</div><div class="reason-back">Your laugh is my favorite sound</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">🫶</div><div class="reason-back">How you care for everyone around you</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">👑</div><div class="reason-back">You're the queen of my heart</div></div></div>
+                <div class="reason-card"><div class="reason-inner"><div class="reason-front">💍</div><div class="reason-back">Because you're simply... you, Areeba</div></div></div>
+            </div>
+        </section>
+
+        <!-- Love Letter Envelope -->
+        <section class="envelope-section">
+            <h2 class="section-title">A Letter for You...</h2>
+            <div class="envelope" onclick="openLetter()">💌</div>
+            <div class="letter-content" id="letterContent">
+                <p>My Dearest Areeba,</p>
+                <p>On this special day, I want you to know how much you mean to me. You've painted my world in shades of red — passion, love, and warmth. Every moment with you is a gift I treasure. You're not just my girlfriend; you're my best friend, my sunshine, my everything.</p>
+                <p>Happy Birthday, my love. Here's to many more birthdays together, to late-night talks, silly jokes, and a lifetime of love.</p>
+                <p>Forever yours ❤️</p>
+            </div>
+        </section>
+
+        <!-- Forever Button -->
+        <section class="forever-section">
+            <button class="btn forever-btn" onclick="foreverExplosion()">Forever Yours ❤️</button>
+        </section>
+    </div>
+
+    <!-- Music Button -->
+    <button class="music-btn" onclick="toggleMusic()" title="Play Daddy Mummy">🎵</button>
+    <audio id="bgMusic" loop>
+        <!-- Daddy Mummy song (instrumental/cover version) -->
+        <source src="https://files.catbox.moe/2kq1x0.mp3" type="audio/mpeg">
+    </audio>
+    <div id="musicFallback" style="display:none;">
+        <!-- Fallback: We'll use a YouTube embed hidden approach -->
+    </div>
+
+    <script>
+        // ===== FALLING PETALS =====
+        const petalsContainer = document.getElementById('petals');
+        for (let i = 0; i < 30; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            petal.style.animationDelay = Math.random() * 10 + 's';
+            petal.style.width = (Math.random() * 15 + 10) + 'px';
+            petal.style.height = (Math.random() * 15 + 10) + 'px';
+            petalsContainer.appendChild(petal);
+        }
+
+        // ===== TYPED TEXT =====
+        const typedText = document.getElementById('typed-text');
+        const message = "Happy Birthday, Areeba";
+        let charIndex = 0;
+        function typeWriter() {
+            if (charIndex < message.length) {
+                typedText.textContent += message.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 150);
+            }
+        }
+        typeWriter();
+
+        // ===== COUNTDOWN WITH SURPRISE REVEAL =====
+        let surpriseRevealed = false;
+        let continuousConfetti = null;
+
+        function launchContinuousConfetti() {
+            const duration = 30 * 1000; // 30 seconds
+            const end = Date.now() + duration;
+            const colors = ['#e63946', '#ff6b7a', '#ffb3b3', '#ff0000', '#ffffff', '#ffd700'];
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.7 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.7 },
+                    colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function revealBirthdaySurprise() {
+            if (surpriseRevealed) return;
+            surpriseRevealed = true;
+
+            // Show the surprise section
+            const surpriseSection = document.getElementById('birthdaySurprise');
+            surpriseSection.classList.add('show');
+
+            // Update countdown look
+            document.getElementById('countdownTitle').textContent = '🎉 IT\'S YOUR BIRTHDAY, AREEBA! 🎉';
+            document.getElementById('countdownTitle').style.color = '#ff6b7a';
+            document.getElementById('countdownTitle').style.fontSize = '3rem';
+
+            // Add birthday mode to countdown items
+            document.querySelectorAll('.countdown-item').forEach(item => {
+                item.classList.add('birthday-mode');
+            });
+
+            // Massive confetti burst
+            confetti({ particleCount: 300, spread: 180, origin: { y: 0.6 }, colors: ['#e63946', '#ff6b7a', '#ffb3b3', '#ff0000', '#ffd700'] });
+            setTimeout(() => confetti({ particleCount: 200, spread: 120, origin: { y: 0.5 } }), 500);
+            setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } }), 1000);
+
+            // Continuous confetti for 30 seconds
+            launchContinuousConfetti();
+
+            // Auto-scroll to the surprise after a brief moment
+            setTimeout(() => {
+                surpriseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 800);
+
+            // Auto-play music on birthday
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.play().catch(e => console.log('Autoplay blocked'));
+            if (!musicPlaying) {
+                musicPlaying = true;
+                document.querySelector('.music-btn').textContent = '⏸️';
+            }
+        }
+
+        function updateCountdown() {
+            const birthday = new Date('2026-06-17T00:00:00');
+            const now = new Date();
+            const diff = birthday - now;
+
+            if (diff <= 0 && !surpriseRevealed) {
+                // Countdown hit zero!
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                revealBirthdaySurprise();
+                return;
+            }
+
+            if (diff <= 0) {
+                // Already revealed, keep updating at zero
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            // Pulse effect when less than 1 hour remains
+            if (diff < 3600000) {
+                document.querySelectorAll('.countdown-item').forEach(item => {
+                    item.style.animation = 'heartbeat 0.4s ease-in-out infinite';
+                    item.style.borderColor = '#ff6b7a';
+                });
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // ===== SURPRISE MESSAGES =====
+        const surprises = [
+            "You're the missing piece to my puzzle. 🧩",
+            "If kisses were stars, I'd give you the sky. ✨",
+            "Areeba, you make my heart do backflips! 🤸",
+            "You're more beautiful than a sunset on a beach. 🌅",
+            "I must be a snowflake, because I've fallen for you. ❄️",
+            "You're the WiFi to my soul — without you, I can't connect. 📶",
+            "Every love song makes sense because of you. 🎶",
+            "Areeba, you're my favorite notification. 🔔"
+        ];
+        function showSurprise() {
+            const msg = surprises[Math.floor(Math.random() * surprises.length)];
+            document.getElementById('surpriseMsg').textContent = msg;
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.5, x: 0.5 }, colors: ['#e63946', '#ff6b7a', '#ffb3b3'] });
+        }
+
+        // ===== BLOW CANDLES =====
+        let candlesBlown = false;
+        function blowCandles() {
+            if (candlesBlown) return;
+            candlesBlown = true;
+            document.getElementById('flame1').classList.add('out');
+            document.getElementById('flame2').classList.add('out');
+            document.getElementById('flame3').classList.add('out');
+            document.getElementById('smoke1').style.display = 'block';
+            document.getElementById('smoke2').style.display = 'block';
+            document.getElementById('smoke3').style.display = 'block';
+            document.getElementById('cakeInstruction').textContent = 'Candles blown! 🎉 Make a wish, Areeba!';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.5 }, colors: ['#e63946', '#ff6b7a', '#ffd700'] });
+            setTimeout(() => {
+                candlesBlown = false;
+                document.getElementById('flame1').classList.remove('out');
+                document.getElementById('flame2').classList.remove('out');
+                document.getElementById('flame3').classList.remove('out');
+                document.getElementById('smoke1').style.display = 'none';
+                document.getElementById('smoke2').style.display = 'none';
+                document.getElementById('smoke3').style.display = 'none';
+                document.getElementById('cakeInstruction').textContent = 'Click to blow out the candles!';
+            }, 5000);
+        }
+
+        // ===== LOVE LETTER =====
+        function openLetter() {
+            document.querySelector('.envelope').classList.toggle('open');
+            document.getElementById('letterContent').classList.toggle('show');
+        }
+
+        // ===== FOREVER EXPLOSION =====
+        function foreverExplosion() {
+            confetti({ particleCount: 300, spread: 180, origin: { y: 0.6 }, colors: ['#e63946', '#ff6b7a', '#ffb3b3', '#ff0000', '#ffffff', '#ffd700'] });
+            setTimeout(() => confetti({ particleCount: 200, spread: 120, origin: { y: 0.5 } }), 400);
+            setTimeout(() => confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } }), 800);
+            setTimeout(() => confetti({ particleCount: 100, spread: 150, origin: { y: 0.3 } }), 1200);
+        }
+
+        // ===== MUSIC TOGGLE (Daddy Mummy) =====
+        let musicPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+
+        // Try to set the source to a working Daddy Mummy audio
+        // Using multiple fallback options
+        const audioSources = [
+            'https://files.catbox.moe/2kq1x0.mp3', // Primary
+        ];
+
+        function tryAudioSource(index) {
+            if (index >= audioSources.length) {
+                console.log('Could not load Daddy Mummy audio from any source. Music button will still work but may need a valid audio URL.');
+                return;
+            }
+            bgMusic.src = audioSources[index];
+            bgMusic.load();
+        }
+
+        bgMusic.addEventListener('error', function() {
+            console.log('Audio source failed, trying next...');
+            const currentIndex = audioSources.indexOf(bgMusic.src);
+            tryAudioSource(currentIndex + 1);
+        });
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                document.querySelector('.music-btn').textContent = '🎵';
+                document.querySelector('.music-btn').title = 'Play Daddy Mummy';
+            } else {
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        document.querySelector('.music-btn').textContent = '⏸️';
+                        document.querySelector('.music-btn').title = 'Pause Daddy Mummy';
+                    }).catch(e => {
+                        console.log('Playback failed:', e);
+                        alert('Tap the music button again to play "Daddy Mummy" 🎵\n\n(Note: You may need to upload the song file or use a valid audio URL)');
+                    });
+                }
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // ===== SCROLL REVEAL =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.flirty-card').forEach(card => observer.observe(card));
+
+        // ===== FLOATING HEARTS ON NAME HOVER =====
+        document.querySelector('.glitch-text').addEventListener('mouseover', function(e) {
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('span');
+                heart.textContent = ['❤️', '💕', '💖', '💗', '💝'][Math.floor(Math.random() * 5)];
+                heart.style.position = 'fixed';
+                heart.style.left = (e.clientX + Math.random() * 60 - 30) + 'px';
+                heart.style.top = (e.clientY + Math.random() * 40 - 20) + 'px';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '999';
+                heart.style.animation = 'floatUp 2s ease forwards';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }
+        });
+
+        // ===== FLOATUP ANIMATION =====
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes floatUp {
+                from { opacity: 1; transform: translateY(0) scale(1); }
+                to { opacity: 0; transform: translateY(-100px) scale(0.5); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        // ===== IMPORTANT NOTE ABOUT AUDIO =====
+        console.log('🎵 NOTE: For the "Daddy Mummy" song to play, you need to:');
+        console.log('1. Upload the MP3 file to your GitHub repo (e.g., as "daddy-mummy.mp3")');
+        console.log('2. Update the audio source in the code to: "daddy-mummy.mp3"');
+        console.log('3. OR use a direct link to the song file');
+        console.log('💡 Current placeholder URL may not work. Replace it with your actual audio file.');
+    </script>
+</body>
+</html>
